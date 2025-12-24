@@ -1,0 +1,4 @@
+- [x] Update BookController store method to handle cover and categories
+- [x] Update BookController update method to handle cover and categories
+- [x] Update create.blade.php view to include cover and categories fields
+- [x] Update edit.blade.php view to include cover and categories fields

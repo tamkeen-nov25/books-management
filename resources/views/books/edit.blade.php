@@ -25,6 +25,27 @@
                 <option value="0" {{ !$bookData->is_available ? 'selected' : '' }}>No</option>
             </select>
         </div>
+        <div class="mb-3">
+            <label for="cover_color" class="form-label">Cover Color</label>
+            <input type="text" class="form-control" id="cover_color" name="cover_color" value="{{ $bookData->cover->color ?? '' }}">
+        </div>
+        <div class="mb-3">
+            <label for="cover_format" class="form-label">Cover Format</label>
+            <select class="form-control" id="cover_format" name="cover_format">
+                <option value="">Select Format</option>
+                <option value="1" {{ ($bookData->cover->format ?? '') == 1 ? 'selected' : '' }}>Hardcover</option>
+                <option value="2" {{ ($bookData->cover->format ?? '') == 2 ? 'selected' : '' }}>Paperback</option>
+                <option value="3" {{ ($bookData->cover->format ?? '') == 3 ? 'selected' : '' }}>Ebook</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="categories" class="form-label">Categories</label>
+            <select class="form-control" id="categories" name="categories[]" multiple>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ $bookData->categories->contains($category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
         <x-button type="submit" class="btn btn-success">Update Book</x-button>
     </form>
 </div>

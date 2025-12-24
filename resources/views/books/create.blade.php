@@ -24,6 +24,28 @@
                 <option value="0">No</option>
             </select>
         </div>
+        <div class="mb-3">
+            <label for="cover_color" class="form-label">Cover Color</label>
+            <input type="text" class="form-control" id="cover_color" name="cover_color">
+        </div>
+        <div class="mb-3">
+            <label for="cover_format" class="form-label">Cover Format</label>
+            <select class="form-control" id="cover_format" name="cover_format">
+                <option value="">Select Format</option>
+                <option value="1">Hardcover</option>
+                <option value="2">Paperback</option>
+                <option value="3">Ebook</option>
+            </select>
+
+        </div>
+        <div class="mb-3">
+            <label for="categories" class="form-label">Categories</label>
+            <select class="form-control" id="categories" name="categories[]" multiple>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
         <x-button type="submit" class="btn btn-success">Create Book</x-button>
     </form>
 </div>

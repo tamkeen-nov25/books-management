@@ -17,4 +17,14 @@ class Book extends Model
         'published_year' => 'integer',
         'is_available' => 'boolean'
     ];
+
+    public function cover()
+    {
+        return $this->hasOne(Cover::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'book_category');
+    }
 }
