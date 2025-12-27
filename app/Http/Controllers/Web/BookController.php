@@ -37,12 +37,11 @@ class BookController extends Controller
         $book = Book::create($validated);
 
         if ($request->has('cover_color') && $request->has('cover_format')) {
-            $book->cover()->create([
-                'color' => $request->cover_color,
-                'format' => $request->cover_format
-            ]);
         }
-
+        $book->cover()->create([
+            'color' => $request->cover_color,
+            'format' => $request->cover_format
+        ]);
         if ($request->has('categories')) {
             $book->categories()->attach($request->categories);
         }
@@ -60,7 +59,7 @@ class BookController extends Controller
     {
         $bookData = Book::findOrFail($book);
         $categories = Category::all();
-        return view('books.edit', compact('bookData','categories'));
+        return view('books.edit', compact('bookData', 'categories'));
     }
 
     public function update(Request $request, $book)

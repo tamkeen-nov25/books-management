@@ -2,51 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
+use App\Services\BookService;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+    public function __construct(protected BookService $bookService) {}
     public function index()
     {
-        $books = Book::query()->get();
+        // $books = Book::query()->get();
+        $books = $this->bookService->index();
         return $this->successResponse($books, 'Books retrieved successfully');
     }
 
+    /*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * Display the specified book
+     *
+     * @param  int  $book
+     * @return \Illuminate\Http\Response
+     */
+    /*******  477b8d32-9717-46a6-b816-a9dfa18ed3bf  *******/
     public function show($book)
     {
         $bookData = Book::findOrFail($book);
         return $this->successResponse($bookData, 'Book retrieved successfully');
     }
 
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'min:3', 'max:255'],
-            'author' => ['required', 'string', 'min:3', 'max:255'],
-            'published_year' => ['required', 'integer', 'min:1000', 'max:2025'],
-            'is_available' => ['required', 'boolean']
-        ]);
-
-        $book = Book::create($validated);
+        // $book = Book::create($request->validated());
+        $book = $this->bookService->store($request->validated());
 
         return $this->successResponse($book, 'Book created successfully');
     }
 
-    public function update(Request $request, $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-        $bookData = Book::find($book);
-        
-        $validated = $request->validate([
-            'title' => ['sometimes', 'string', 'min:3', 'max:255'],
-            'author' => ['sometimes', 'string', 'min:3', 'max:255'],
-            'published_year' => ['sometimes', 'integer', 'min:1000', 'max:2025'],
-            'is_available' => ['sometimes', 'boolean']
-        ]);
+        $this->bookService->update($book, $request->validated());
 
-        $bookData->update($validated);
-
-        return $this->successResponse($bookData, 'Book updated successfully');
+        return $this->successResponse($book, 'Book updated successfully');
     }
 
     public function destroy($book)
