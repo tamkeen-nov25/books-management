@@ -15,4 +15,12 @@ class Category extends Model
     {
         return $this->belongsToMany(Book::class, 'book_category');
     }
+
+    /**
+     * Get all comments for this category
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

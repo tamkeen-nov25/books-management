@@ -1,5 +1,5 @@
 <footer class="bg-dark text-white text-center py-3 mt-4">
     <div class="container">
-        <p>&copy; 2025 Books Management. All rights reserved.</p>
+        <p>&copy; 2025 {{ __('ui.app_name') }}. All rights reserved.</p>
     </div>
 </footer>

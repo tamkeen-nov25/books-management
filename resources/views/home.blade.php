@@ -2,17 +2,17 @@
 
 @section('content')
 <div class="container">
-    <h1>Welcome to Books Management</h1>
+    <h1>{{ __('ui.welcome.welcome_to', ['app' => __('ui.app_name')]) }}</h1>
     <div class="row">
         <div class="col-md-6">
-            <x-card title="Books">
-                <p>Manage your book collection.</p>
-                <x-button href="{{ route('books.index') }}" class="btn btn-primary">Go to Books List</x-button>
+            <x-card :title="__('ui.books')">
+                <p>{{ __('ui.welcome.manage_books') }}</p>
+                <x-button href="{{ route('books.index') }}" class="btn btn-primary">{{ __('ui.welcome.go_to_books') }}</x-button>
             </x-card>
         </div>
         <div class="col-md-6">
-            <x-card title="Orders">
-                <p>View and manage orders.</p>
+            <x-card :title="__('ui.orders')">
+                <p>{{ __('ui.welcome.manage_orders') }}</p>
             </x-card>
         </div>
     </div>
