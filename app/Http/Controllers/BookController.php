@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function __construct(protected BookService $bookService) {}
+    // public function __construct(protected BookService $bookService) {}
     public function index()
     {
         $books = Book::query()->paginate(15);
@@ -25,27 +25,14 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     /*******  477b8d32-9717-46a6-b816-a9dfa18ed3bf  *******/
-    public function show($book)
+    public function show(Book $book)
     {
-        $bookData = Book::findOrFail($book);
-        return $this->successResponse(new BookResource($bookData), 'Book retrieved successfully');
+        return $this->successResponse(new BookResource($book), 'Book retrieved successfully');
     }
 
     public function store(StoreBookRequest $request)
     {
-        $validated = $request->validate([
-            'title' => ['required', 'array'],
-            'title.en' => ['required', 'string', 'min:3', 'max:255'],
-            'title.ar' => ['required', 'string', 'min:3', 'max:255'],
-
-            'description' => ['nullable', 'array'],
-            'description.en' => ['nullable', 'string'],
-            'description.ar' => ['nullable', 'string'],
-
-            'author' => ['required', 'string', 'min:3', 'max:255'],
-            'published_year' => ['required', 'integer', 'min:1000', 'max:2025'],
-            'is_available' => ['required', 'boolean'],
-        ]);
+        $validated = $request->validated();
 
         $book = Book::create($validated);
 
@@ -54,33 +41,18 @@ class BookController extends Controller
 
     public function update(UpdateBookRequest $request, Book $book)
     {
-        $bookData = Book::find($book);
 
-        $validated = $request->validate([
-            'title' => ['sometimes', 'array'],
-            'title.en' => ['sometimes', 'string', 'min:3', 'max:255'],
-            'title.ar' => ['sometimes', 'string', 'min:3', 'max:255'],
+        $validated = $request->validated();
 
-            'description' => ['sometimes', 'array'],
-            'description.en' => ['sometimes', 'string'],
-            'description.ar' => ['sometimes', 'string'],
+        $book->update($validated);
 
-            'author' => ['sometimes', 'string', 'min:3', 'max:255'],
-            'published_year' => ['sometimes', 'integer', 'min:1000', 'max:2025'],
-            'is_available' => ['sometimes', 'boolean'],
-        ]);
-
-        $bookData->update($validated);
-
-        return $this->successResponse(new BookResource($bookData), 'Book updated successfully');
+        return $this->successResponse(new BookResource($book), 'Book updated successfully');
     }
 
-    public function destroy($book)
+    public function destroy(Book $book)
     {
-        $bookData = Book::findOrFail($book);
-        $bookData->delete();
+        $book->delete();
 
         return $this->successResponse(['id' => $book], 'Book deleted successfully');
     }
 }
-

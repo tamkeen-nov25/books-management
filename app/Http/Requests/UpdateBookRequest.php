@@ -22,10 +22,17 @@ class UpdateBookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'string', 'min:3', 'max:255'],
+            'title' => ['sometimes', 'array'],
+            'title.en' => ['sometimes', 'string', 'min:3', 'max:255'],
+            'title.ar' => ['sometimes', 'string', 'min:3', 'max:255'],
+
+            'description' => ['sometimes', 'array'],
+            'description.en' => ['sometimes', 'string'],
+            'description.ar' => ['sometimes', 'string'],
+
             'author' => ['sometimes', 'string', 'min:3', 'max:255'],
             'published_year' => ['sometimes', 'integer', 'min:1000', 'max:2025'],
-            'is_available' => ['sometimes', 'boolean']
+            'is_available' => ['sometimes', 'boolean'],
         ];
     }
 }
