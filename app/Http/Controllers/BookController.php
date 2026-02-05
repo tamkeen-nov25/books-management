@@ -2,25 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use App\Http\Resources\BookResource;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+    public function __construct(protected BookService $bookService) {}
     public function index()
     {
         $books = Book::query()->paginate(15);
         return $this->successResponse(BookResource::collection($books)->response()->getData(), 'Books retrieved successfully');
     }
 
+    /*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * Display the specified book
+     *
+     * @param  int  $book
+     * @return \Illuminate\Http\Response
+     */
+    /*******  477b8d32-9717-46a6-b816-a9dfa18ed3bf  *******/
     public function show($book)
     {
         $bookData = Book::findOrFail($book);
         return $this->successResponse(new BookResource($bookData), 'Book retrieved successfully');
     }
 
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
         $validated = $request->validate([
             'title' => ['required', 'array'],
@@ -41,7 +52,7 @@ class BookController extends Controller
         return $this->successResponse(new BookResource($book), 'Book created successfully');
     }
 
-    public function update(Request $request, $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
         $bookData = Book::find($book);
 
@@ -72,3 +83,4 @@ class BookController extends Controller
         return $this->successResponse(['id' => $book], 'Book deleted successfully');
     }
 }
+
