@@ -3,6 +3,8 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ReviewController;
+use App\Mail\NewBooksSummary;
+use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,4 +41,9 @@ Route::prefix('reviews')->group(function () {
     Route::get('/without-reviews', [ReviewController::class, 'getBooksWithoutReviews']);
     Route::get('/book/{book}/stats', [ReviewController::class, 'getBookReviewStats']);
     Route::post('/book/{book}', [ReviewController::class, 'store']);
+});
+
+
+Route::get('test',function(){
+    return new NewBooksSummary(Book::all()->toArray());
 });

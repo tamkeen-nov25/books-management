@@ -33,6 +33,7 @@ class StoreBookRequest extends FormRequest
             'author' => ['required', 'string', 'min:3', 'max:255'],
             'published_year' => ['required', 'integer', 'min:1000', 'max:2025'],
             'is_available' => ['required', 'boolean'],
+            'file' => ['nullable', 'file', 'mimes:pdf,epub,zip', 'max:20480'],
         ];
     }
 }

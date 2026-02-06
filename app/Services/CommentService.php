@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\CommentCreated;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Comment;
@@ -22,8 +23,13 @@ class CommentService
 
         // Cast the commentable_type to full class name
         $data['commentable_type'] = $typeMap[$data['commentable_type']];
+        $comment = Comment::create($data);
 
-        return Comment::create($data);
+        if ($comment->commentable_type === Book::class) {
+            event(new CommentCreated($comment));
+        }
+
+        return $comment;
     }
 
     /**

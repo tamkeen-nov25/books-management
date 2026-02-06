@@ -6,6 +6,7 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use App\Http\Resources\BookResource;
+use App\Jobs\StoreBookFileJob;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -33,8 +34,24 @@ class BookController extends Controller
     public function store(StoreBookRequest $request)
     {
         $validated = $request->validated();
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('tmp/books', 'local');
 
+            $validated['file_path'] = $path;
+        }
+
+        // Create book only
         $book = Book::create($validated);
+
+        // Dispatch job with book id + file (if exists)
+        if ($request->hasFile('file')) {
+           StoreBookFileJob::dispatch($book, $path);
+        }
+
+        return $this->successResponse(
+            new BookResource($book),
+            'Book created successfully'
+        );
 
         return $this->successResponse(new BookResource($book), 'Book created successfully');
     }
